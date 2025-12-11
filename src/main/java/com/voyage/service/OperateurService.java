@@ -5,6 +5,7 @@ import com.voyage.repository.OperateurRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OperateurService {
@@ -18,10 +19,28 @@ public class OperateurService {
         return operateurRepository.findAll();
     }
 
-    public Operateur creerOperateur(Operateur operateur) {
-        if (operateurRepository.findByCode(operateur.getCode()) != null) {
+    public Operateur creerOperateur(Operateur operateurRecu) {
+        if (operateurRepository.findByCode(operateurRecu.getCode()) != null) {
             throw new RuntimeException("Cet opérateur existe déjà");
         }
-        return operateurRepository.save(operateur);
+
+        Operateur nouvelOperateur = new Operateur();
+        nouvelOperateur.setCode(operateurRecu.getCode());
+        nouvelOperateur.setNom(operateurRecu.getNom());
+
+        return operateurRepository.save(nouvelOperateur);
+    }
+
+    public Operateur modifierOperateur(int id, Operateur nouvellesInfos) {
+        Operateur operateurAModifier = operateurRepository.findById(id).orElse(null);
+        if (operateurAModifier != null) {
+            operateurAModifier.setNom(nouvellesInfos.getNom());
+            return operateurRepository.save(operateurAModifier);
+        }
+        return null;
+    }
+
+    public void supprimerOperateur(int id) {
+        operateurRepository.deleteById(id);
     }
 }

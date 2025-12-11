@@ -2,7 +2,6 @@ package com.voyage.controller;
 
 import com.voyage.entity.Offre;
 import com.voyage.service.VolService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -22,7 +21,10 @@ public class SearchController {
             @RequestParam String origine,
             @RequestParam String destination,
             @RequestParam LocalDateTime dateDepart
-            ){
-        return volService.rechercherVols(origine, destination, dateDepart);
+    ){
+
+        List<Offre> toutesLesOffres = volService.rechercherVols();
+
+        return volService.filtrerVols(toutesLesOffres, origine, destination, dateDepart);
     }
 }
